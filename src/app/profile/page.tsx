@@ -274,7 +274,23 @@ export default function ProfilePage() {
         </div>
 
 
-          {/* Support Section */}
+        {/* Account Actions */}
+        <div className="space-y-3">
+          {/* Reset Password Section */}
+          <div className="card p-4 w-full text-left hover:shadow-xl transition-shadow flex items-center justify-between cursor-pointer" onClick={handleResetPassword}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <FaLock className="text-purple-600" />
+              </div>
+              <div>
+                <div className="font-semibold text-gray-800">Reset Password</div>
+                <div className="text-xs text-gray-500">Change your account password</div>
+              </div>
+            </div>
+            <span className="text-gray-400">→</span>
+          </div> 
+          
+        {/* Support Section */}
           <Link href="/support" className="block">
             <div className="card p-4 w-full text-left hover:shadow-xl transition-shadow flex items-center justify-between">
               <div className="flex items-center gap-3">
