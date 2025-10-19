@@ -24,13 +24,7 @@ export default function ProfilePage() {
     phone: user?.phone || '',
   });
 
-  const [showSecurityForm, setShowSecurityForm] = useState(false);
-  const [securityForm, setSecurityForm] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  });
-  const [securityLoading, setSecurityLoading] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -123,42 +117,8 @@ export default function ProfilePage() {
     setShowLogoutModal(false);
   };
 
-  const handleSecuritySubmit = async () => {
-    if (securityForm.newPassword !== securityForm.confirmPassword) {
-      alert('New passwords do not match');
-      return;
-    }
-
-    if (securityForm.newPassword.length < 6) {
-      alert('Password must be at least 6 characters long');
-      return;
-    }
-
-    setSecurityLoading(true);
-    try {
-      const supabase = createClient();
-      
-      // Update password directly using Supabase client
-      const { error } = await supabase.auth.updateUser({
-        password: securityForm.newPassword
-      });
-
-      if (error) throw error;
-
-      setSuccessMessage('Password updated successfully!');
-      setShowSuccessPopup(true);
-      setSecurityForm({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      });
-      setShowSecurityForm(false);
-    } catch (error) {
-      console.error('Error updating password:', error);
-      alert('Failed to update password. Please try again.');
-    } finally {
-      setSecurityLoading(false);
-    }
+  const handleResetPassword = () => {
+    router.push('/reset-password');
   };
 
 
@@ -315,59 +275,18 @@ export default function ProfilePage() {
 
         {/* Account Actions */}
         <div className="space-y-3">
-          {/* Security Section */}
-          <div className="card p-4 w-full">
-            <button 
-              onClick={() => setShowSecurityForm(!showSecurityForm)}
-              className="w-full text-left flex items-center justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <FaLock className="text-purple-600" />
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-800">Security</div>
-                  <div className="text-xs text-gray-500">Update your password</div>
-                </div>
+          {/* Reset Password Section */}
+          <div className="card p-4 w-full text-left hover:shadow-xl transition-shadow flex items-center justify-between cursor-pointer" onClick={handleResetPassword}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <FaLock className="text-purple-600" />
               </div>
-              <span className="text-gray-400">{showSecurityForm ? '▲' : '▼'}</span>
-            </button>
-
-            {showSecurityForm && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <h4 className="font-semibold text-gray-800 mb-3">Update Password</h4>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
-                    <input
-                      type="password"
-                      value={securityForm.newPassword}
-                      onChange={(e) => setSecurityForm({ ...securityForm, newPassword: e.target.value })}
-                      className="input-field"
-                      placeholder="Enter new password"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
-                    <input
-                      type="password"
-                      value={securityForm.confirmPassword}
-                      onChange={(e) => setSecurityForm({ ...securityForm, confirmPassword: e.target.value })}
-                      className="input-field"
-                      placeholder="Confirm new password"
-                    />
-                  </div>
-                  <button
-                    onClick={handleSecuritySubmit}
-                    disabled={securityLoading}
-                    className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50"
-                  >
-                    <FaLock />
-                    {securityLoading ? 'Updating...' : 'Update Password'}
-                  </button>
-                </div>
+              <div>
+                <div className="font-semibold text-gray-800">Reset Password</div>
+                <div className="text-xs text-gray-500">Change your account password</div>
               </div>
-            )}
+            </div>
+            <span className="text-gray-400">→</span>
           </div>
 
           {/* Support Section */}

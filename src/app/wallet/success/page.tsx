@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { createClient } from '@/lib/supabase/client';
+import { attemptSessionRecovery } from '@/lib/supabase/session-recovery';
 import { FaCheckCircle, FaSpinner } from 'react-icons/fa';
 
 export default function WalletSuccess() {
@@ -21,12 +22,24 @@ export default function WalletSuccess() {
   const paymentMethod = searchParams.get('paymentMethod') || 'unknown';
 
   useEffect(() => {
+    // Attempt session recovery on page load (after redirect from payment gateway)
+    const recoverSession = async () => {
+      console.log('🔄 Wallet success page loaded, attempting session recovery...');
+      const recovered = await attemptSessionRecovery();
+      if (!recovered) {
+        console.log('❌ Session recovery failed, user might be logged out');
+      }
+    };
+
+    recoverSession();
+
     const processPayment = async () => {
       // Prevent multiple executions
       if (hasProcessed.current) return;
       hasProcessed.current = true;
 
       if (!transactionId || !user) {
+        console.log('❌ Missing transaction ID or user, redirecting to wallet...');
         setTimeout(() => router.push('/wallet'), 3000);
         return;
       }

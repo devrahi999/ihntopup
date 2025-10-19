@@ -136,9 +136,7 @@ export default function LoginPage() {
                 <input type="checkbox" className="rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-gray-600">Remember me</span>
               </label>
-              <Link href="#" className="text-primary font-semibold hover:underline">
-                Forgot password?
-              </Link>
+              
             </div>
 
             <button type="submit" disabled={loading} className="btn-primary w-full text-lg disabled:opacity-50 disabled:cursor-not-allowed">

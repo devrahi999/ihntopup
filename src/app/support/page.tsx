@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { createClient as createBrowserClient } from '@/lib/supabase/client';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp, FaClock, FaPaperPlane } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp, FaClock, FaPaperPlane, FaTelegram } from 'react-icons/fa';
 
 export default function SupportPage() {
   const { user } = useAuth();
@@ -91,21 +91,6 @@ export default function SupportPage() {
           <div className="lg:col-span-1 space-y-4">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Contact Information</h2>
 
-            {/* Phone */}
-            <div className="card p-4 sm:p-6 hover:shadow-xl transition-shadow">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center flex-shrink-0">
-                  <FaPhone className="text-white text-lg" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 mb-1">Phone</h3>
-                  <a href="tel:+8801712345678" className="text-primary hover:underline text-sm sm:text-base">
-                    +880 1712-345678
-                  </a>
-                  <p className="text-xs text-gray-500 mt-1">Call us anytime</p>
-                </div>
-              </div>
-            </div>
 
             {/* Email */}
             <div className="card p-4 sm:p-6 hover:shadow-xl transition-shadow">
@@ -115,8 +100,8 @@ export default function SupportPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-bold text-gray-800 mb-1">Email</h3>
-                  <a href="mailto:support@ihntopup.com" className="text-primary hover:underline text-sm sm:text-base break-all">
-                    support@ihntopup.com
+                  <a href="mailto:ihntopup@gmail.com" className="text-primary hover:underline text-sm sm:text-base break-all">
+                    ihntopup@gmail.com
                   </a>
                   <p className="text-xs text-gray-500 mt-1">24/7 email support</p>
                 </div>
@@ -131,29 +116,30 @@ export default function SupportPage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-bold text-gray-800 mb-1">WhatsApp</h3>
-                  <a href="https://wa.me/8801712345678" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm sm:text-base">
-                    +880 1712-345678
+                  <a href="https://wa.me/8801850822479" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm sm:text-base">
+                    +880 1850822479
                   </a>
                   <p className="text-xs text-gray-500 mt-1">Quick chat support</p>
                 </div>
               </div>
             </div>
 
-            {/* Address */}
+            {/* Telegram */}
             <div className="card p-4 sm:p-6 hover:shadow-xl transition-shadow">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <FaMapMarkerAlt className="text-white text-lg" />
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <FaTelegram className="text-white text-lg" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 mb-1">Office Address</h3>
-                  <p className="text-gray-600 text-sm sm:text-base">
-                    Dhaka, Bangladesh
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">Visit us</p>
+                  <h3 className="font-bold text-gray-800 mb-1">Telegram</h3>
+                  <a href="https://t.me/ihntopup" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm sm:text-base">
+                    @ihntopup
+                  </a>
+                  <p className="text-xs text-gray-500 mt-1">Instant messaging support</p>
                 </div>
               </div>
             </div>
+
 
             {/* Working Hours */}
             <div className="card p-4 sm:p-6 bg-gradient-to-br from-primary/10 to-primary/5">
@@ -165,12 +151,12 @@ export default function SupportPage() {
                   <h3 className="font-bold text-gray-800 mb-2">Working Hours</h3>
                   <div className="space-y-1 text-sm text-gray-600">
                     <div className="flex justify-between">
-                      <span>Monday - Friday:</span>
-                      <span className="font-semibold">9 AM - 11 PM</span>
+                      <span>Friday - Sunday:</span>
+                      <span className="font-semibold">24 Hours</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Saturday - Sunday:</span>
-                      <span className="font-semibold">10 AM - 10 PM</span>
+                      <span>Sunday - Thursday:</span>
+                      <span className="font-semibold">12 PM - 2 AM</span>
                     </div>
                   </div>
                 </div>

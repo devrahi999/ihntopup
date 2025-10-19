@@ -115,40 +115,42 @@ export async function POST(request: NextRequest) {
       }
 
     } else if (paymentType === 'topup') {
-      // Similar idempotency for orders
-      const { data: currentOrder, error: queryError } = await supabase
+      // CREATE ORDER ONLY AFTER SUCCESSFUL PAYMENT
+      const metadata = verifyData.metadata || {};
+      
+      // Extract order details from metadata
+      const orderData = {
+        user_id: metadata.user_id,
+        pack_id: metadata.pack_id,
+        player_uid: metadata.player_uid,
+        amount: parseFloat(metadata.amount) || amount,
+        diamonds: parseInt(metadata.diamonds) || 0,
+        status: 'completed',
+        payment_method: paymentMethod || verifyData.payment_method || 'instant',
+        item_name: metadata.item_name,
+        card_id: metadata.card_id,
+        card_name: metadata.card_name,
+        quantity: parseInt(metadata.quantity) || 1,
+        rupantorpay_transaction_id: verifyData.trx_id,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      console.log('🔄 Creating order after successful payment:', orderData);
+
+      const { data: newOrder, error: orderError } = await supabase
         .from('orders')
-        .select('status')
-        .eq('id', localId)
+        .insert([orderData])
+        .select()
         .single();
 
-      if (queryError || !currentOrder) {
-        console.error('Order not found:', queryError);
-        return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+      if (orderError) {
+        console.error('Error creating order after payment:', orderError);
+        return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
       }
 
-      if (currentOrder.status === 'completed') {
-        updateSuccess = true;
-      } else {
-        const { error: orderError } = await supabase
-          .from('orders')
-          .update({ 
-            status: 'completed', 
-            payment_method: paymentMethod || verifyData.payment_method || 'instant',
-            rupantorpay_trx_id: verifyData.trx_id,
-            amount: amount,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', localId);
-
-        if (orderError) {
-          console.error('Error updating order:', orderError);
-          return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
-        }
-
-        updateSuccess = true;
-        // For topup, could credit wallet if needed, but per flow, mark completed for admin fulfillment
-      }
+      console.log('✅ Order created successfully:', newOrder.id);
+      updateSuccess = true;
     } else {
       return NextResponse.json({ error: 'Unknown payment type' }, { status: 400 });
     }

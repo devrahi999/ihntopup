@@ -24,41 +24,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Create or update pending order - let Supabase generate the UUID
-    const pendingOrder = {
-      user_id: userId,
-      pack_id: packId,
-      player_uid: playerUid,
-      amount: parseFloat(amount),
-      diamonds: diamonds ? parseInt(diamonds) : 0,
-      status: 'pending',
-      payment_method: 'rupantorpay',
-      item_name: itemName,
-      card_id: cardId,
-      card_name: cardName,
-      quantity: quantity || 1,
-      created_at: new Date().toISOString(),
-      rupantorpay_transaction_id: null,
-    };
-
-    const { data: newOrder, error: insertError } = await supabase
-      .from('orders')
-      .insert([pendingOrder])
-      .select()
-      .single();
-
-    if (insertError || !newOrder) {
-      console.error('Error creating pending order:', insertError);
-      return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
-    }
-
-    const localOrderId = newOrder.id;
-
-    // Prepare RupantorPay request
+    // Prepare RupantorPay request - NO ORDER CREATION BEFORE PAYMENT
     const apiKey = process.env.RUPANTORPAY_API_KEY;
     if (!apiKey) {
       return NextResponse.json({ error: 'Payment gateway not configured' }, { status: 500 });
     }
+
+    // Generate a temporary session ID to track this payment attempt
+    const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const rupantorBody = {
       fullname: fullname || user.name || 'User',
@@ -69,9 +42,17 @@ export async function POST(request: NextRequest) {
       webhook_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/payment/webhook`,
       metadata: {
         type: 'topup',
-        order_id: localOrderId,
-        phone: phone || '',
+        user_id: userId,
+        pack_id: packId,
         player_uid: playerUid,
+        amount: amount,
+        diamonds: diamonds || 0,
+        item_name: itemName,
+        card_id: cardId,
+        card_name: cardName,
+        quantity: quantity || 1,
+        session_id: sessionId,
+        phone: phone || '',
       },
     };
 
@@ -90,27 +71,15 @@ export async function POST(request: NextRequest) {
     const rupantorData = await rupantorResponse.json();
 
     if (rupantorResponse.ok && (rupantorData.status === 1 || rupantorData.status === true)) {
-      // Update order with rupantorpay id (extract from payment_url)
-      const paymentUrlId = rupantorData.payment_url.split('/').pop();
-      const updateRes = await supabase
-        .from('orders')
-        .update({ rupantorpay_transaction_id: paymentUrlId })
-        .eq('id', localOrderId);
-
-      if (updateRes.error) {
-        console.error('Error updating order with payment ID:', updateRes.error);
-      }
-
+      console.log('✅ Payment initiated successfully, no order created yet');
+      
       return NextResponse.json({ 
         success: true,
         payment_url: rupantorData.payment_url,
-        order_id: localOrderId,
-        message: 'Order and payment initiated successfully'
+        session_id: sessionId,
+        message: 'Payment initiated successfully'
       });
     } else {
-      // Clean up pending order
-      await supabase.from('orders').delete().eq('id', localOrderId);
-      
       console.error('RupantorPay error:', rupantorData);
       return NextResponse.json({ 
         success: false,
@@ -118,7 +87,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
   } catch (error) {
-    console.error('Order payment initiation error:', error);
+    console.error('Payment initiation error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

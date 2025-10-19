@@ -168,7 +168,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   className="w-full h-full object-contain"
                 />
               </div>
-              <span className="font-bold text-gray-800">IHN TOPUP Admin</span>
+              <span className="font-bold text-gray-800">IHN Admin</span>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FaWallet, FaUserCircle, FaGem } from 'react-icons/fa';
+import { FaWallet, FaUserCircle, FaWhatsapp, FaTelegram } from 'react-icons/fa';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Header() {
@@ -13,7 +13,7 @@ export default function Header() {
       <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 transform group-hover:scale-110 transition-transform">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 transform group-hover:scale-110 transition-transform">
             <img 
               src="/logo/logo.png" 
               alt="IHN TOPUP Logo" 

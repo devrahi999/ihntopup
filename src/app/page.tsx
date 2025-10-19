@@ -78,7 +78,7 @@ export default async function HomePage() {
           </div>
           <div className="glass-card p-4 text-center">
             <FaGem className="text-3xl text-yellow-500 mx-auto mb-2" />
-            <div className="text-xl sm:text-2xl font-bold text-gray-800">50K+</div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-800">5K+</div>
             <div className="text-xs sm:text-sm text-gray-600">Orders</div>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default async function HomePage() {
                   S
                 </div>
                 <div>
-                  <div className="font-bold text-sm sm:text-base">Sadia Khan</div>
+                  <div className="font-bold text-sm sm:text-base">Imran Khan</div>
                   <div className="text-xs text-gray-500">⭐⭐⭐⭐⭐</div>
                 </div>
               </div>

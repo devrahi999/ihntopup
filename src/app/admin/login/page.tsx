@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
 
         {/* Login Form */}
         <div className="glass-card p-8">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">Sign In</h2>
+          <h2 className="text-2xl font-bold text-black mb-6 text-center">Sign In</h2>
 
           {error && (
             <div className="bg-red-500/10 border-l-4 border-red-500 text-red-400 px-4 py-3 rounded-lg mb-6">
@@ -101,14 +101,13 @@ export default function AdminLoginPage() {
           </form>
 
           {/* Info */}
-          <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-            <p className="text-xs text-blue-400 font-semibold mb-2">Admin credentials are configured in environment variables</p>
-            <p className="text-xs text-blue-300">Check your .env.local file for NEXT_PUBLIC_ADMIN_EMAIL and NEXT_PUBLIC_ADMIN_PASSWORD</p>
+          <div className="mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
+            <p className="text-xs text-white-500 font-semibold mb-2">Login With Admin Email & Password</p>
           </div>
         </div>
 
         <div className="text-center mt-6 text-gray-400 text-sm">
-          <p>Protected Admin Area - Authorized Personnel Only</p>
+          <p>Protected Admin Area - Authorized Person Only</p>
         </div>
       </div>
     </div>
